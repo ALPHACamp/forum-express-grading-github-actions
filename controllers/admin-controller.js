@@ -1,5 +1,4 @@
-const { Restaurant } = require('../models')
-const { User } = require('../models')
+const { Restaurant, User } = require('../models')
 const { localFileHandler } = require('../helpers/file-helpers')
 
 const adminController = {
@@ -90,11 +89,12 @@ const adminController = {
       })
       .catch(err => next(err))
   },
-  getUsers: (req, res) => {
+  getUsers: (req, res, next) => {
     User.findAll({
       raw: true
     })
       .then(users => res.render('admin/users', { users }))
+      .catch(err => next(err))
   },
   patchUser: (req, res, next) => {
     return User.findByPk(req.params.id)
