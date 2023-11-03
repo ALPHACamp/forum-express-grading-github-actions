@@ -25,7 +25,7 @@ const adminController = {
       })
 
       .then(() => {
-        req.flash('success', 'restaurant was successfully created') // 在畫面顯示成功提示
+        req.flash('success_messages', 'restaurant was successfully created') // 在畫面顯示成功提示
         res.redirect('/admin/restaurants') // 新增完成後導回後台首頁
       })
       .catch(err => next(err))
@@ -72,7 +72,7 @@ const adminController = {
       })
 
       .then(() => {
-        req.flash('success', 'Update successfully!')
+        req.flash('success_messages', 'Update successfully!')
         res.redirect('/admin/restaurants')
       })
       .catch(err => next(err))
@@ -85,7 +85,7 @@ const adminController = {
         return restaurant.destroy()
       })
       .then(() => {
-        req.flash('success', 'Delete successfully!')
+        req.flash('success_messages', 'Delete successfully!')
         res.redirect('/admin/restaurants')
       })
       .catch(err => next(err))
@@ -101,7 +101,7 @@ const adminController = {
       .then(user => {
         if (!user) throw new Error('User did not exist!')
         if (user.email === 'root@example.com') {
-          req.flash('error', '禁止變更Root全縣')
+          req.flash('error_messages', '禁止變更 root 權限')
           return res.redirect('back')
         }
         return user.update({
@@ -109,7 +109,7 @@ const adminController = {
         })
       })
       .then(() => {
-        req.flash('success', '權限變更成功')
+        req.flash('success_messages', '使用者權限變更成功')
         return res.redirect('/admin/users')
       })
       .catch(err => next(err))

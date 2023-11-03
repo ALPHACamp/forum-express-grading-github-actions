@@ -24,7 +24,7 @@ const userController = {
           password: hash
         }))
       .then(() => {
-        req.flash('success', '註冊成功!')
+        req.flash('success_messages', '註冊成功!')
         res.redirect('/signin')
       })
       // 傳遞給Express內建的 Error Handler
@@ -34,11 +34,11 @@ const userController = {
     res.render('signin')
   },
   signIn: (req, res) => {
-    req.flash('success', '登入成功')
+    req.flash('success_messages', '登入成功')
     res.redirect('/restaurants')
   },
   logout: (req, res) => {
-    req.flash('success', '登出成功')
+    req.flash('success_messages', '登出成功')
     req.logout() // passport 提供的功能 => 刪除這個id對應的session清除掉 => 登出
     res.redirect('/signin')
   }
