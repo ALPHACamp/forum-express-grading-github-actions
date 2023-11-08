@@ -1,0 +1,7 @@
+{{!-- enctype="multipart/form-data" 告訴form傳入的type為多種(img/file.等) 預設為text 如果未加入file/img req.body會收不到 --}}
+<form action="/admin/restaurants" method="POST" enctype="multipart/form-data">
+  <div class="mb-4 text-center">
+    <h1 class="h3 font-weight-normal mb-3">Create Restaurant</h1>
+  </div>
+  {{> admin-restaurant-form}}
+</form>
