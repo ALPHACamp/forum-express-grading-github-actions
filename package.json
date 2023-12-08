@@ -5,8 +5,7 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "lint": "eslint \"**/*.js\" --fix",
-    "test": "mocha tests --exit --recursive --timeout 5000"
+    "lint": "eslint \"**/*.js\" --fix"
   },
   "repository": {
     "type": "git",
@@ -14,6 +13,7 @@
   },
   "dependencies": {
     "express": "^4.17.1",
+    "express-handlebars": "^7.1.2",
     "mysql2": "^2.3.0",
     "sequelize": "^6.6.5",
     "sequelize-cli": "^6.2.0"

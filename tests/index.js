@@ -4,7 +4,7 @@ const app = require('../app')
 
 describe('# 測試環境初始化', function () {
   context('# First Test Case', () => {
-    it(' GET /admin/users ', (done) => {
+    it(' GET /admin/users ', done => {
       request(app)
         .get('/')
         .end(function (err, res) {
@@ -13,3 +13,5 @@ describe('# 測試環境初始化', function () {
     })
   })
 })
+
+// npx mocha tests --exit --recursive --timeout 5000
