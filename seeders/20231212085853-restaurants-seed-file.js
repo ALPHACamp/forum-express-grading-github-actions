@@ -2,7 +2,7 @@
 const faker = require('faker')
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkInsert('restaurants',
+    await queryInterface.bulkInsert('Restaurants',
       Array.from({ length: 50 }, () => ({
         name: faker.name.findName(),
         tel: faker.phone.phoneNumber(),
@@ -16,6 +16,6 @@ module.exports = {
     )
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDelete('restaurants', {})
+    await queryInterface.bulkDelete('Restaurants', {})
   }
 }
