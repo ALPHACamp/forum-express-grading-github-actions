@@ -13,5 +13,3 @@ describe('# 測試環境初始化', function () {
     })
   })
 })
-
-// npx mocha tests --exit --recursive --timeout 5000

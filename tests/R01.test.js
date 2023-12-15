@@ -14,10 +14,14 @@ describe('# R01', () => {
       request(app)
         // 對 POST /signin 發出請求，參數是錯誤的密碼
         .post('/signin')
+      console.log('1')
         .type('urlencoded')
+      console.log('2')
         .send('email=root@example.com&password=123')
+      console.log('3')
         // 期待登入驗證回應失敗，重新導向 /signin
         .expect('Location', '/signin')
+      console.log('4')
         .expect(302, done)
     })
 
