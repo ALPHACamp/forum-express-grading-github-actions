@@ -19,6 +19,7 @@ describe('# R01', () => {
         // 期待登入驗證回應失敗，重新導向 /signin
         .expect('Location', '/signin')
         .expect(302, done)
+      done()
     })
 
     it('#2 帳號錯誤', function (done) {
@@ -30,6 +31,7 @@ describe('# R01', () => {
         // 期待登入驗證回應失敗，重新導向 /signin
         .expect('Location', '/signin')
         .expect(302, done)
+      done()
     })
 
     it('#3 成功登入', function (done) {
@@ -41,6 +43,7 @@ describe('# R01', () => {
         // 期待登入驗證成功，重新導向 /restaurants
         .expect('Location', '/restaurants')
         .expect(302, done)
+      done()
     })
   });
 
