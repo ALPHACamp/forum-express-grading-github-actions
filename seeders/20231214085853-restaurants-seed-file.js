@@ -7,7 +7,7 @@ module.exports = {
       'SELECT id FROM Categories;',
       { type: queryInterface.sequelize.QueryTypes.SELECT }
     )
-    await queryInterface.bulkInsert('Restaurants',
+    await queryInterface.bulkInsert('restaurants',
       Array.from({ length: 50 }, () => ({
         name: faker.name.findName(),
         tel: faker.phone.phoneNumber(),
@@ -22,6 +22,6 @@ module.exports = {
     )
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDelete('Restaurants', {})
+    await queryInterface.bulkDelete('restaurants', {})
   }
 }

@@ -2,7 +2,7 @@
 const bcrypt = require('bcryptjs')
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkInsert('Users', [{ // 一次新增三筆資料
+    await queryInterface.bulkInsert('users', [{ // 一次新增三筆資料
       email: 'root@example.com',
       password: await bcrypt.hash('12345678', 10),
       is_admin: true,
@@ -26,6 +26,6 @@ module.exports = {
     }], {})
   },
   down: async (queryInterface, Sequelize) => { // 清空資料表中所有資料
-    await queryInterface.bulkDelete('Users', {})
+    await queryInterface.bulkDelete('users', {})
   }
 }
