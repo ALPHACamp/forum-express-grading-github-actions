@@ -89,7 +89,7 @@ const adminController = {
         })
       })
       .then(() => {
-        req.flash('success_messages', 'restaurant was successfully created')
+        req.flash('success_messages', 'restaurant was successfully updated')
         res.redirect('/admin/restaurants')
       })
   },
