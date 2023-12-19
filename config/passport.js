@@ -15,7 +15,7 @@ passport.use(
             where: { email },
             raw: true
           })
-          user
+          return user
             ? (await bcrypt.compare(password, user.password))
                 ? done(null, user)
                 : done(null, false, {
@@ -24,9 +24,20 @@ passport.use(
                 })
             : done(null, false, { message: 'email 或密碼錯誤' })
         } catch (error) {
+          console.log(error)
           done(error)
         }
       })()
+    // (req, username, password, done) => {
+    //   User.findOne({ where: { email: username } })
+    //     .then(user => {
+    //       if (!user) return done(null, false, req.flash('error_messages', '帳號或密碼輸入錯誤!'))
+    //       bcrypt.compare(password, user.password)
+    //         .then(res => {
+    //           if (!res) return done(null, false, req.flash('error_messages', '帳號或密碼輸入錯誤!'))
+    //           return done(null, user)
+    //         })
+    //     })
     }
   )
 )
