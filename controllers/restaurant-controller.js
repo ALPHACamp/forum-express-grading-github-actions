@@ -1,4 +1,4 @@
-const { Restaurant, Category } = require('../models')
+const { Restaurant, Category, Comment, User } = require('../models')
 const { getOffset, getPagination } = require('../helpers/pagination-helper')
 
 const restaurantController = {
@@ -10,7 +10,7 @@ const restaurantController = {
     const offset = getOffset(limit, page)
 
     return Promise.all([
-      Restaurant.findAndCountAll({  // 修改這裡
+      Restaurant.findAndCountAll({
         include: Category,
         where: {
           ...categoryId ? { categoryId } : {}
@@ -23,7 +23,7 @@ const restaurantController = {
       Category.findAll({ raw: true })
     ])
       .then(([restaurants, categories]) => {
-        const data = restaurants.rows.map(r => ({ // 修改這裡，加上 .rows
+        const data = restaurants.rows.map(r => ({ //加上 .rows
           ...r,
           description: r.description.substring(0, 50)
         }))
@@ -31,18 +31,21 @@ const restaurantController = {
           restaurants: data,
           categories,
           categoryId,
-          pagination: getPagination(limit, page, restaurants.count) // 修改這裡，把 pagination 資料傳回樣板
+          pagination: getPagination(limit, page, restaurants.count) //把 pagination 資料傳回樣板
         })
       })
   },
   getRestaurant: (req, res, next) => {
     return Restaurant.findByPk(req.params.id, {
-      include: Category, // 拿出關聯的 Category model
+      include: [
+        Category, // 拿出關聯的 Category model
+        { model: Comment, include: User }
+      ]
 
     })
       .then(restaurant => {
         if (!restaurant) throw new Error("Restaurant didn't exist!")
-        return restaurant.increment('countView')
+        return restaurant.increment('viewCounts')
       })
       .then((restaurant) => {
         res.render('restaurant', {
