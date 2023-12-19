@@ -39,7 +39,7 @@ describe('# R01', () => {
         .type('urlencoded')
         .send('email=root@example.com&password=12345678')
         // 期待登入驗證成功，重新導向 /restaurants
-        .expect('Location', '/admin/restaurants')
+        .expect('Location', '/restaurants')
         .expect(302, done)
     })
   });
