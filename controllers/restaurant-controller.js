@@ -23,7 +23,7 @@ const restaurantController = {
       Category.findAll({ raw: true })
     ])
       .then(([restaurants, categories]) => {
-        const data = restaurants.rows.map(r => ({ //加上 .rows
+        const data = restaurants.rows.map(r => ({ // 加上 .rows
           ...r,
           description: r.description.substring(0, 50)
         }))
@@ -31,7 +31,7 @@ const restaurantController = {
           restaurants: data,
           categories,
           categoryId,
-          pagination: getPagination(limit, page, restaurants.count) //把 pagination 資料傳回樣板
+          pagination: getPagination(limit, page, restaurants.count) // 把 pagination 資料傳回樣板
         })
       })
   },
@@ -47,24 +47,24 @@ const restaurantController = {
         if (!restaurant) throw new Error("Restaurant didn't exist!")
         return restaurant.increment('viewCounts')
       })
-      .then((restaurant) => {
+      .then(restaurant => {
         res.render('restaurant', {
           restaurant: restaurant.toJSON()
         })
       })
 
-
       .catch(err => next(err))
   },
   getDashboard: (req, res, next) => {
     return Restaurant.findByPk(req.params.id, {
-      include: Category,
-      nest: true,
-      raw: true
+      include: [
+        Category, // 拿出關聯的 Category model
+        { model: Comment, include: User }
+      ]
     })
       .then(restaurant => {
         if (!restaurant) throw new Error("Restaurant didn't exist!")
-        res.render('dashboard', { restaurant })
+        res.render('dashboard', { restaurant: restaurant.toJSON() })
       })
       .catch(err => next(err))
   }
