@@ -39,16 +39,25 @@ const userController = {
     res.redirect('/signin')
   },
   getUser: (req, res, next) => {
-    res.render('userProfile')
+    return User.findByPk(req.params.id)
+      .then(user => {
+        if (!user) throw new Error("User didn't exist!")
+        res.render('users/profile', { user: user.toJSON() })
+      })
+
   },
   editUser: (req, res, next) => {
-    res.render('editUser')
+    return User.findByPk(req.params.id)
+      .then(user => {
+        if (!user) throw new Error("User didn't exist!")
+        res.render('users/edit', { user: user.toJSON() })
+      })
   },
   putUser: (req, res, next) => {
     const { name } = req.body
     if (!name) throw new Error('Name is required!')
     const { file } = req // 把檔案取出來
-    Promise.all([ // 非同步處理
+    return Promise.all([ // 非同步處理
       User.findByPk(req.params.id), // 去資料庫查有沒有這間餐廳
       localFileHandler(file) // 把檔案傳到 file-helper 處理
     ])
@@ -61,9 +70,10 @@ const userController = {
         })
       })
       .then(() => {
-        req.flash('success_messages', 'User was successfully updated')
-        res.redirect('/users/:id')
+        req.flash('success_messages', '使用者資料編輯成功')
+        res.redirect(`/users/${req.params.id}`)
       })
+      .catch(err => next(err))
   }
 }
 

@@ -31,7 +31,7 @@ router.get('/', (req, res) => {
 router.delete('/comments/:id', authenticated, commentController.deleteComment)
 router.post('/comments', authenticated, commentController.postComment)
 
-router.put('/users/:id/', upload.single('image'), authenticated, userController.putUser)
+router.put('/users/:id', upload.single('image'), authenticated, userController.putUser)
 router.get('/users/:id/edit', authenticated, userController.editUser)
 router.get('/users/:id', authenticated, userController.getUser)
 
