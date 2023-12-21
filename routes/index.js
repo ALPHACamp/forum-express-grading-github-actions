@@ -16,6 +16,8 @@ router.use('/admin', authenticatedAdmin, admin)
 
 router.get('/signup', userController.signUpPage)
 router.post('/signup', userController.signUp)
+
+router.get('/restaurants/feeds', authenticated, restController.getFeeds)
 router.get('/restaurants/:id/dashboard', authenticated, restController.getDashboard)
 router.get('/restaurants/:id', authenticated, restController.getRestaurant)
 router.get('/restaurants', authenticated, restController.getRestaurants)
