@@ -1,8 +1,8 @@
 const passport = require('passport')
 const LocalStrategy = require('passport-local')
 const bcrypt = require('bcryptjs')
-const db = require('../models')
-const { User } = db
+const { User, Restaurant } = require('../models')
+
 
 passport.use(new LocalStrategy(
   {
@@ -28,11 +28,14 @@ passport.serializeUser((user, cb) => {
 })
 
 passport.deserializeUser((id, cb) => {
-  User.findByPk(id)
-    .then(user => {
-      user = user.toJSON() // findByPk會回傳sequelize model，而不是單純的user object。toJSON()可以移除sequelize的特性。
-      return cb(null, user)
-    })
+  return User.findByPk(id, {
+    include: [
+      { model: Restaurant, as: 'FavoritedRestaurants' }
+    ]
+  })
+    .then(user => cb(null, user.toJSON()))
+    .catch(err => cb(err))
 })
+
 
 module.exports = passport
