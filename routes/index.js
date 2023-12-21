@@ -37,6 +37,10 @@ router.put('/users/:id', upload.single('image'), authenticated, userController.p
 router.get('/users/:id/edit', authenticated, userController.editUser)
 router.get('/users/:id', authenticated, userController.getUser)
 
+router.delete('/favorite/:restaurantId', authenticated, userController.removeFavorite)
+router.post('/favorite/:restaurantId', authenticated, userController.addFavorite)
+
 router.use('/', generalErrorHandler)
+
 
 module.exports = router
