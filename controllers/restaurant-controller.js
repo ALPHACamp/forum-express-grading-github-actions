@@ -41,7 +41,8 @@ const restaurantController = {
     return Restaurant.findByPk(req.params.id, {
       include: [
         Category, // 拿出關聯的 Category model
-        { model: Comment, include: User }
+        { model: Comment, include: User },
+        { model: User, as: 'FavoritedUsers' }
       ]
 
     })
@@ -50,8 +51,10 @@ const restaurantController = {
         return restaurant.increment('viewCounts')
       })
       .then(restaurant => {
+        const isFavorited = restaurant.FavoritedUsers.some(f => f.id === req.user.id) // some 找到true便停止
         res.render('restaurant', {
-          restaurant: restaurant.toJSON()
+          restaurant: restaurant.toJSON(),
+          isFavorited
         })
       })
 
