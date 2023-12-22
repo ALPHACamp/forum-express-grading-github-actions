@@ -40,7 +40,9 @@ router.get('/users/:id', authenticated, userController.getUser)
 router.delete('/favorite/:restaurantId', authenticated, userController.removeFavorite)
 router.post('/favorite/:restaurantId', authenticated, userController.addFavorite)
 
-router.use('/', generalErrorHandler)
+router.delete('/like/:restaurantId', authenticated, userController.removeLike)
+router.post('/like/:restaurantId', authenticated, userController.addLike)
 
+router.use('/', generalErrorHandler)
 
 module.exports = router
