@@ -13,8 +13,20 @@
         <p class="card-text">
           <span>{{user.email}}</span>
         </p>
-        <a class="btn btn-primary" href="/users/{{user.id}}/edit">edit</a>
+        <span><strong>{{user.Comments.length}} </strong>已評論餐廳</span>
       </div>
+      <a class="btn btn-primary ms-3 mt-5" href="/users/{{user.id}}/edit">edit</a>
     </div>
+  </div>
+</div>
+
+<div class="card">
+  <h5 class="card-header fw-bold">{{user.Comments.length}} 已評論餐廳</h5>
+  <div class="card-body text-start">
+    {{#each user.Comments}}
+    <a href="/restaurants/{{this.Restaurant.id}}" style="text-decoration: none;">
+      <img class="m-3" src="{{this.Restaurant.image}}" width="100px" height="100px">
+    </a>
+    {{/each}}
   </div>
 </div>
