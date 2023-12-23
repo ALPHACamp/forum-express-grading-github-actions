@@ -117,7 +117,7 @@ const restaurantController = {
 
         res.render('restaurantsTop', { restaurants })
       })
-      .catch(e => next(e))
+      .catch(err => next(err))
   }
 }
 
