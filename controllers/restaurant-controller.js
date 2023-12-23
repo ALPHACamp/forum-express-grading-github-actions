@@ -100,6 +100,26 @@ const restaurantController = {
         })
       })
       .catch(err => next(err))
+  },
+  getTopRestaurants: (req, res, next) => {
+    return Promise.all([
+      Restaurant.findAll({
+        limit: 10,
+        // include: { model: User, as: 'FavoritedRestaurants' },
+        raw: true,
+        nest: true
+      })
+    ])
+      .then(restaurant => {
+        if (!restaurant) throw new Error("Restaurant didn't exist!")
+        res.render('dashboard', { restaurant: restaurant.toJSON() })
+      })
+      .then(restaurants => {
+        res.render('restaurantsTop', { restaurants })
+      })
+
+
+
   }
 
 }
