@@ -45,8 +45,6 @@ const userController = {
     })
       .then(user => {
         user = user.toJSON()
-
-        console.log(user.Comments.length)
         if (!user) throw new Error("User didn't exist!")
         res.render('users/profile', { user })
       })
