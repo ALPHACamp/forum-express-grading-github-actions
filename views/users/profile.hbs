@@ -1,15 +1,23 @@
 <div class="d-flex row justify-content-center">
-  <div class="raw d-flex bg-white col-8 p-0">
-    <div class="col-auto">
-      <img src="{{user.image}}" alt="user image" style="width: 300px; transition: opacity 0.5s; opacity:0;"
-        onload="this.style.opacity=1;">
+  <div class="raw d-flex bg-white col-10 p-0">
+    <div class="col-auto text-center">
+      {{#if user.image}}
+      <img src="{{user.image}}" alt="user image"
+        style="width: 300px; height: 300px; transition: opacity 0.5s; opacity:0;" onload="this.style.opacity=1;">
+      {{else}}
+      <img src="https://fakeimg.pl/140/" alt="user image"
+        style="width: 300px; height: 300px; transition: opacity 0.5s; opacity:0;" onload="this.style.opacity=1;">
+      {{/if}}
     </div>
     <div class="col-8">
-      <div class="m-5">
-        <p class="fw-bold fs-5">{{user.name}}</p>
+      <div class="ms-5 mb-2 p-1">
+        <p class="fw-bold fs-5 m-0">{{user.name}}</p>
         <p>{{user.email}}</p>
-        <p class="fw-semibold">{{#if user.CommentedRestaurants
+        <p class="fw-semibold m-0">{{#if user.CommentedRestaurants
           }}{{user.CommentedRestaurants.length}}間已評論過的餐廳{{else}}目前沒評論過餐廳。{{/if}}</p>
+        <p class="fw-semibold m-0">{{favoritedRestaurants.length}}間已收藏的餐廳</p>
+        <p class="fw-semibold m-0">{{followings.length}} followings(追蹤者)</p>
+        <p class="fw-semibold mb-3">{{followers.length}} followers(追隨者)</p>
         <form action="/users/{{user.id}}/edit" method="get">
           <button type="submit" class="btn btn-primary">Edit</button>
         </form>
@@ -17,26 +25,99 @@
     </div>
 
   </div>
-  <div class="col-8 p-0 mt-5">
-    <div class="card p-0">
-      <div class="card-header">
-        {{user.CommentedRestaurants.length}}已評論過的餐廳
-      </div>
-      <div class="card-body text-center">
-        <div class="row">
-          {{#each user.CommentedRestaurants}}
-          <div class="col-md-2 mb-3">
-            <a href="/restaurants/{{this.id}}">
-              <img class="" src="{{this.image}}" alt="user commemtedRestaurants " width="100px" height="100px"
-                style="transition: opacity 0.5s; opacity:0;" onload="this.style.opacity=1;">
-            </a>
+  <div class="col-10 p-0 mt-5">
+    <div class="row d-flex">
+      <div class="col">
+        <div class="card p-0 mb-5">
+          <div class="card-header">
+            {{followings.length}} followings(追蹤者)
           </div>
-          {{/each}}
+          <div class="card-body">
+            <div class="row">
+              {{#each followings}}
+              <div class="d-flex col-auto m-1 p-0">
+                <a href="/users/{{this.id}}">
+                  {{#if this.image}}
+                  <img src="{{this.image}}" alt="followings image" width="50px" height="50px"
+                    style="transition: opacity 0.5s; opacity:0;" onload="this.style.opacity=1;">
+                  {{else}}
+                  <img src="https://fakeimg.pl/140/" width="50px" height="50px" />
+                  {{/if}}
+                </a>
+              </div>
+              {{/each}}
+            </div>
 
+          </div>
         </div>
 
+        <div class="card p-0 mb-5">
+          <div class="card-header">
+            {{followers.length}} followers(追隨者)
+          </div>
+          <div class="card-body">
+            <div class="row">
+              {{#each followers}}
+              <div class="d-flex col-auto m-1 p-0">
+                <a href="/users/{{this.id}}">
+                  {{#if this.image}}
+                  <img src="{{this.image}}" alt="followings image" width="50px" height="50px"
+                    style="transition: opacity 0.5s; opacity:0;" onload="this.style.opacity=1;">
+                  {{else}}
+                  <img src="https://fakeimg.pl/140/" width="50px" height="50px" />
+                  {{/if}}
+                </a>
+              </div>
+              {{/each}}
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="card p-0 mb-5">
+          <div class="card-header">
+            {{user.CommentedRestaurants.length}}已評論過的餐廳
+          </div>
+          <div class="card-body">
+            <div class="row">
+              {{#each user.CommentedRestaurants}}
+              <div class="d-flex col-auto m-1 p-0">
+                <a href="/restaurants/{{this.id}}">
+                  <img class="" src="{{this.image}}" alt="user commemtedRestaurants " width="50px" height="50px"
+                    style="transition: opacity 0.5s; opacity:0;" onload="this.style.opacity=1;">
+                </a>
+              </div>
+              {{/each}}
+            </div>
+          </div>
+        </div>
+
+        <div class="card p-0">
+          <div class="card-header">
+            {{favoritedRestaurants.length}}間收藏的餐廳
+          </div>
+          <div class="card-body text-center">
+            <div class="row">
+              {{#each favoritedRestaurants}}
+              <div class="d-flex col-auto m-1 p-0">
+                <a href="/restaurants/{{this.id}}">
+                  <img class="" src="{{this.image}}" alt="user favoritedRestaurants " width="50px" height="50px"
+                    style="transition: opacity 0.5s; opacity:0;" onload="this.style.opacity=1;">
+                </a>
+              </div>
+              {{/each}}
+            </div>
+          </div>
+        </div>
       </div>
 
     </div>
+
+
+
+
 
   </div>

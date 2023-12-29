@@ -50,7 +50,10 @@ const userController = {
         user = user.toJSON()
         // 新增user屬性CommentedRestaurants存放餐廳資訊
         user.CommentedRestaurants = user.Comments && user.Comments.map(c => c.Restaurant)
-        res.render('users/profile', { user })
+        const followers = req.user && req.user.Followers
+        const followings = req.user && req.user.Followings
+        const favoritedRestaurants = req.user && req.user.FavoritedRestaurants
+        res.render('users/profile', { user, followers, followings, favoritedRestaurants })
       })
       .catch(err => next(err))
   },
