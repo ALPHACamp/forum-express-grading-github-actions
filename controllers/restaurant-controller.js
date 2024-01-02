@@ -122,7 +122,7 @@ const restController = {
           ]
         ]
       },
-      // having: sequelize.literal('favoritedCount > 0'), // 收藏數>0才可以撈近來
+      having: sequelize.literal('favoritedCount > 0'), // 收藏數>0才可以撈進來
       // 使用order進行排序
       order: [
         [sequelize.literal('favoritedCount'), 'DESC']
