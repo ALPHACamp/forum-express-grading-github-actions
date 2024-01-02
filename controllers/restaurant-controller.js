@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 const { Restaurant, Category, User, Comment, sequelize } = require('../models')
-=======
-const { Restaurant, Category, User, Comment, sequelize, Favorite } = require('../models')
->>>>>>> cab4dde3d388f06a09a7fccfc4de86906ac42aef
 const { getOffset, getPagination } = require('../helpers/pagination-helper')
 
 const restController = {
