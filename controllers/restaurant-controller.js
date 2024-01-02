@@ -1,4 +1,4 @@
-const { Restaurant, Category, User, Comment } = require('../models')
+const { Restaurant, Category, User, Comment, sequelize } = require('../models')
 const { getOffset, getPagination } = require('../helpers/pagination-helper')
 
 const restController = {
@@ -59,7 +59,7 @@ const restController = {
         if (!restaurant) throw new Error('沒有此餐廳')
         return restaurant.increment('viewCounts')
       })
-      .then((restaurant) => {
+      .then(restaurant => {
         // 因只要查到一筆資料比對即可，所以使用some，也因為使用一筆資料，所以使用User的FavoritedUsers即可比較有效率
         const isFavorite = restaurant.FavoritedUsers.some(f => f.id === req.user.id) // some找到一筆資料即回傳true停止程式
         const isLike = restaurant.LikedUsers.some(l => l.id === req.user.id)
@@ -107,20 +107,37 @@ const restController = {
   },
   getTopRestaurants: (req, res, next) => {
     return Restaurant.findAll({
-      include: [{
-        model: User, as: 'FavoritedUsers'
-      }]
+      include: [{ model: User, as: 'FavoritedUsers', require: false }],
+      attributes: {
+        // 可以用sequelize的子查詢方法(sub queries)，進行複雜的搜索資料
+        include: [
+          [
+            // sequelize.literal可以插入原生SQL語法
+            sequelize.literal(`(
+            SELECT COUNT(*)
+            FROM Favorites as Favorite
+            WHERE Favorite.restaurant_id = Restaurant.id
+          )`),
+            'favoritedCount' // 取別名為favoritedCount
+          ]
+        ]
+      },
+      having: sequelize.literal('favoritedCount > 0'), // 收藏數>0才可以撈進來
+      // 使用order進行排序
+      order: [
+        [sequelize.literal('favoritedCount'), 'DESC']
+      ],
+      limit: 10
     })
       .then(restaurants => {
-        restaurants = restaurants.map(r => ({
+        const result = restaurants.map(r => ({
           ...r.toJSON(),
           description: r.description.substring(0, 50),
-          favoritedCount: r.FavoritedUsers.length,
-          isFavorited: req.user && req.user.FavoritedRestaurants.map(fr => fr.id).includes(r.id)
+          isFavorited: req.user && req.user.FavoritedRestaurants.some(fr => fr.id === r.id),
+          favoritedCount: r.FavoritedUsers.length
         }))
-          .sort((a, b) => b.favoritedCount - a.favoritedCount) // 排序收藏數多寡
-          .slice(0, 10) // 取得前10筆資料即可
-        res.render('top-restaurants', { restaurants })
+          .sort((a, b) => b.favoritedCount - a.favoritedCount)
+        return res.render('top-restaurants', { restaurants: result })
       })
       .catch(err => next(err))
   }
