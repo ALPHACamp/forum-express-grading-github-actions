@@ -15,16 +15,12 @@ on:
 
 env:
   NODE_ENV: github
-
 jobs:
   test:
-
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         node-version: [18.x] # ex: [16.x, 18.x], See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
     steps:
       - uses: mirromutth/mysql-action@v1.1
         with:
@@ -46,10 +42,4 @@ jobs:
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-      - run: npm install
-      - run: npm install sequelize-cli -g
-      - run: sequelize db:migrate
-      - run: sequelize db:seed:all
-      - run: npm test
+        
