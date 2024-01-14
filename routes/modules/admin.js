@@ -1,8 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const adminController = require('../../controllers/admin-controller')
-const upload = require('../../../forum-copy/middleware/multer')
-
+const upload = require('../../middleware/multer')
 router.get('/users', adminController.getUsers)
 router.patch('/users/:id', adminController.patchUser)
 router.get('/restaurants', adminController.getRestaurants)
