@@ -6,6 +6,7 @@ const userController = require('../controllers/user-controller.js')
 const generalErrorHandler = require('../middleware/error-handler.js')
 const passport = require('../config/passport')
 const { authenticated, authenticatedAdmin } = require('../middleware/auth.js')
+
 router.use('/admin', authenticatedAdmin, admin)
 router.get('/signup', userController.signUpPage)
 router.post('/signup', userController.signUp)
