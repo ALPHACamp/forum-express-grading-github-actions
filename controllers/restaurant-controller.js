@@ -5,17 +5,31 @@ const restaurantController = {
       include: Category,
       nest: true,
       raw: true
-    }).then(restaurants => {
-      const data = restaurants.map(r =>
-        ({
+    })
+      .then(restaurants => {
+        const data = restaurants.map(r => ({
           ...r,
           description: r.description.substring(0, 50)
+        }))
+        return res.render('restaurants', {
+          restaurants: data
         })
-      )
-      return res.render('restaurants', {
-        restaurants: data
       })
-    }).catch(error => next(error))
+      .catch(error => next(error))
+  },
+  getRestaurant: (req, res, next) => {
+    return Restaurant.findByPk(req.params.id, {
+      include: Category,
+      nest: true,
+      raw: true
+    })
+      .then(restaurant => {
+        if (!restaurant) throw new Error("Restaurant didn't exist!")
+        res.render('restaurant', {
+          restaurant
+        })
+      })
+      .catch(err => next(err))
   }
 }
 module.exports = restaurantController
