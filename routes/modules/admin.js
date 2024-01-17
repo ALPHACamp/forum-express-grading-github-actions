@@ -15,6 +15,8 @@ router.get('/restaurants/:id', adminController.getRestaurant)
 router.put('/restaurants/:id', upload.single('image'), adminController.putRestaurant)
 router.post('/restaurants', upload.single('image'), adminController.postRestaurant)
 router.delete('/restaurants/:id', adminController.deleteRestaurant)
+router.get('/categories/:id', categoryController.getCategories)
+router.put('/categories/:id', categoryController.putCategory)
 router.get('/categories', categoryController.getCategories)
 router.post('/categories', categoryController.postCategory)
 router.use('/', (req, res) => {
