@@ -1,0 +1,16 @@
+<div class="w-100 mx-auto bg-white d-flex" style="height: 380px">
+
+  <img
+    class="img-responsive center-block rounded-circle"
+    src="{{user.image}}"
+    style="width:35%; height:100%; transition: opacity 0.5s; opacity:0;"
+    onload="this.style.opacity=1;"
+  />
+
+  <div class="ms-5 mt-3">
+    <h4>{{user.name}}</h4>
+    <p>{{user.email}}</p>
+    <a class="btn btn-primary" href="/users/{{user.id}}/edit">edit</a>
+  </div>
+
+</div>

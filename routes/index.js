@@ -7,11 +7,15 @@ const generalErrorHandler = require('../middleware/error-handler.js')
 const passport = require('../config/passport')
 const { authenticated, authenticatedAdmin } = require('../middleware/auth.js')
 const commentController = require('../controllers/comment-controller')
+const upload = require('../middleware/multer')
 
 router.use('/admin', authenticatedAdmin, admin)
 router.get('/signup', userController.signUpPage)
 router.post('/signup', userController.signUp)
 router.get('/signin', userController.signInPage)
+router.get('/users/:id', userController.getUser)
+router.get('/users/:id/edit', userController.editUser)
+router.put('/users/:id', upload.single('image'), userController.putUser)
 router.post(
   '/signin',
   passport.authenticate('local', {
