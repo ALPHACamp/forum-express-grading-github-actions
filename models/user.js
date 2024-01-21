@@ -1,0 +1,33 @@
+'use strict' // 有另一種定義方式：sequelize.define詳情參考sequelize網站:model basics
+const {
+  Model
+} = require('sequelize')
+module.exports = (sequelize, DataTypes) => {
+  class User extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
+    static associate (models) {
+      User.hasMany(models.Comment, { foreignKey: 'UserId' })
+      // define association here
+    }
+  };
+  User.init(
+    {
+      name: DataTypes.STRING,
+      email: DataTypes.STRING,
+      password: DataTypes.STRING,
+      isAdmin: DataTypes.BOOLEAN,
+      image: DataTypes.STRING
+    },
+    {
+      sequelize,
+      modelName: 'User',
+      tableName: 'Users',
+      underscored: true // 駝峰式轉成底線命名
+    }
+  )
+  return User
+}
