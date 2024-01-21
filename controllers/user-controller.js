@@ -1,6 +1,5 @@
 const bcrypt = require('bcryptjs')
-const db = require('../models')
-const User = db.User
+const { User, Restaurant, Comment } = require('../models')
 const { localFileHandler } = require('../helpers/file-helpers')
 
 const userController = {
@@ -41,12 +40,18 @@ const userController = {
     res.redirect('/signin')
   },
   getUser: (req, res, next) => {
-    return User.findByPk(req.params.id, {
-      raw: true
-    })
+    return User.findByPk(req.params.id,
+      { include: { model: Comment, include: Restaurant } })
       .then(user => {
         if (!user) throw new Error("User didn't exist!")
-        return res.render('users/profile', { user })
+        const restaurants =
+        user.Comments
+          ? user.Comments.map(comment => ({ ...comment.dataValues.Restaurant.toJSON() }))
+          : []
+        return res.render('users/profile', {
+          user: user.toJSON(),
+          restaurants
+        })
       })
       .catch(err => next(err))
   },
@@ -64,7 +69,7 @@ const userController = {
     const { name } = req.body
     const id = req.params.id
     if (!name) throw new Error('User name is required!')
-    if (id !== req.user.id) throw new Error('沒有權限修改')
+    if (req.user.id !== parseInt(id)) throw new Error('沒有權限修改')
     const { file } = req
     return Promise.all([User.findByPk(id), localFileHandler(file)])
       .then(([user, filePath]) => {
