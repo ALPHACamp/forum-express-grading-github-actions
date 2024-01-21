@@ -12,10 +12,24 @@ module.exports = {
         type: Sequelize.STRING
       },
       user_Id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Users',
+          key: 'id',
+          onDelete: 'CASCADE',
+          onUpdate: 'CASCADE'
+        }
       },
       restaurant_Id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Restaurants',
+          key: 'id',
+          onDelete: 'CASCADE',
+          onUpdate: 'CASCADE'
+        }
       },
       created_at: {
         allowNull: false,
