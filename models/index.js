@@ -7,16 +7,14 @@ const basename = path.basename(__filename)
 const env = process.env.NODE_ENV || 'development'
 const config = require(path.resolve(__dirname, '../config/config.json'))[env]
 const db = {}
-
-// 資料庫連線
+// 與資料庫連線
 let sequelize
 if (config.use_env_variable) {
   sequelize = new Sequelize(process.env[config.use_env_variable], config)
 } else {
   sequelize = new Sequelize(config.database, config.username, config.password, config)
 }
-
-// 動態引入其他 models
+// 自動偵測models底下檔案，動態載入
 fs
   .readdirSync(__dirname)
   .filter(file => {
@@ -26,16 +24,14 @@ fs
     const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes)
     db[model.name] = model
   })
-
-// 設定 Models 之間的關聯
+// 設定models之間的關聯
 Object.keys(db).forEach(modelName => {
   if (db[modelName].associate) {
     db[modelName].associate(db)
   }
 })
-
 // 匯出需要的物件
-db.sequelize = sequelize
-db.Sequelize = Sequelize
+db.sequelize = sequelize // 代表sequelize的 instance，new出來的
+db.Sequelize = Sequelize // 代表sequelize的class套件
 
 module.exports = db
