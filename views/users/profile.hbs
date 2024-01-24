@@ -8,8 +8,24 @@
       <div class="card-body">
         <h5 class="card-title">{{user.name}}</h5>
         <p class="card-text">{{user.email}}</p>
+        <p class="card-text"><strong>{{commentData.length}}</strong> 已評論餐廳</p>
         <a href="/users/{{user.id}}/edit" class="btn btn-primary">Edit</a>
       </div>
+    </div>
+  </div>
+</div>
+
+<div class="card my-3">
+  <div class="col-md-4 row">
+      <h3 class="card-title m-3"><strong>{{commentData.length}}</strong> 已評論餐廳</h3>
+  </div>
+  <div class="col-md-8">
+    <div class="card-body">
+      {{#each commentData}}
+      <a href="/restaurants/{{this.dataValues.restaurantId}}">
+      <img src="{{this.Restaurant.dataValues.image}}" class="img-thumbnail ms-1" style="max-width: 100px; max-height: 100px;" alt="{{this.Restaurant.dataValues.name}}">
+    </a>
+      {{/each}}
     </div>
   </div>
 </div>

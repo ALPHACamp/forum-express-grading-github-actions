@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs')
 const db = require('../models')
 const { localFileHandler } = require('../helpers/file-helpers')
-const { User } = db
+const { User, Restaurant, Comment } = db
 const userController = {
   signUpPage: (req, res) => {
     res.render('signup')
@@ -39,10 +39,20 @@ const userController = {
     res.redirect('/signin')
   },
   getUser: (req, res, next) => {
-    return User.findByPk(req.params.id)
+    return User.findByPk(req.params.id, {
+      include: [
+        {
+          model: Comment,
+          include: [{ model: Restaurant, attributes: ['image', 'name'] }]
+        }
+      ]
+    })
       .then(user => {
         if (!user) throw new Error("User didn't exists!")
-        return res.render('users/profile', { user: user.toJSON() })
+
+        const commentData = user.Comments ? user.Comments : []
+
+        return res.render('users/profile', { user: user.toJSON(), commentData })
       })
       .catch(err => next(err))
   },
