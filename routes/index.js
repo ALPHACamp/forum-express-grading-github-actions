@@ -34,6 +34,9 @@ router.get('/restaurants', authenticated, restController.getRestaurants)
 // comments
 router.delete('/comments/:id', authenticatedAdmin, commentController.deleteComment)
 router.post('/comments', authenticated, commentController.postComment)
+// Favorite
+router.post('/favorite/:restaurantId', authenticated, userController.addFavorite)
+router.delete('/favorite/:restaurantId', authenticated, userController.removeFavorite)
 
 router.use('/', (req, res) => res.redirect('/restaurants'))
 
