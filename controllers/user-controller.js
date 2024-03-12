@@ -1,6 +1,6 @@
-const db = require('../models')
-const { User } = db
 const bcrypt = require('bcryptjs')
+const db = require('../models')
+const User = db.User
 
 const userController = {
   signupPage: (req, res) => {
@@ -27,6 +27,18 @@ const userController = {
         res.redirect('/signin')
       })
       .catch((err) => next(err))
+  },
+  signInPage: (req, res) => {
+    res.render('signin')
+  },
+  signIn: (req, res) => {
+    req.flash('success_messages', '成功登入！')
+    res.redirect('/restaurants')
+  },
+  logout: (req, res) => {
+    req.flash('success_messages', '登出成功！')
+    req.logout() //passport提供的logout()
+    res.redirect('/signin')
   }
 }
 
