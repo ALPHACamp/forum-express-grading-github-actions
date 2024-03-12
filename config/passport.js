@@ -30,6 +30,7 @@ passport.serializeUser((user, cb) => {
 // 登入時從session比對，看是否已經是登入狀態********/
 passport.deserializeUser((id, cb) => {
   User.findByPk(id).then((user) => {
+    user = user.toJSON()
     return cb(null, user)
   })
 })
