@@ -1,6 +1,7 @@
 //const { Restaurant } = require('../models')等於下面兩行
 const db = require('../models')
 const Restaurants = db.Restaurant
+const { localFileHandler } = require('../helpers/file-helpers')
 
 const adminController = {
   getRestaurants: (req, res, next) => {
@@ -17,14 +18,21 @@ const adminController = {
   },
   postRestaurant: (req, res, next) => {
     const { name, tel, address, openingHours, description } = req.body
+    const { file } = req
+
     if (!name) throw new Error('Restaurant name is required!')
-    Restaurants.create({
-      name: name,
-      tel: tel,
-      address: address,
-      openingHours: openingHours,
-      description: description
-    })
+
+    localFileHandler(file)
+      .then((filePath) => {
+        Restaurants.create({
+          name,
+          tel,
+          address,
+          openingHours,
+          description,
+          image: filePath || null
+        })
+      })
       .then(() => {
         req.flash('success_messages', 'restaurant was successfully created')
         res.redirect('/admin/restaurants')
@@ -57,16 +65,20 @@ const adminController = {
   putRestaurant: (req, res, next) => {
     const { name, tel, address, openingHours, description } = req.body
     const restaurantId = req.params.id
+    const { file } = req
     if (!name) throw new Error('Restaurant name is required!')
-    Restaurants.findByPk(restaurantId)
-      .then((restaurant) => {
+    /*****等全部的promise完成→ 查資料表 + file-helper 處理 → 都完成後才執行下面的.then*********/
+    Promise.all([Restaurants.findByPk(restaurantId), localFileHandler(file)])
+      /*.then同時擁有上面每一個promise物件的陣列*********/
+      .then(([restaurant, filePath]) => {
         if (!restaurant) throw new Error("Restaurant didn't exist!")
         return restaurant.update({
           name: name,
           tel: tel,
           address: address,
           openingHours: openingHours,
-          description: description
+          description: description,
+          image: filePath || restaurant.image
         })
       })
       .then(() => {
