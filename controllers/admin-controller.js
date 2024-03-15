@@ -18,10 +18,14 @@ const adminController = {
       .catch((err) => next(err))
   },
   createRestaurant: (req, res, next) => {
-    return res.render('admin/create-restaurant')
+    return Category.findAll({
+      raw: true
+    })
+      .then((categories) => res.render('admin/create-restaurant', { categories }))
+      .catch((err) => next(err))
   },
   postRestaurant: (req, res, next) => {
-    const { name, tel, address, openingHours, description } = req.body
+    const { name, tel, address, openingHours, description, categoryId } = req.body
     const { file } = req
 
     if (!name) throw new Error('Restaurant name is required!')
@@ -34,7 +38,8 @@ const adminController = {
           address,
           openingHours,
           description,
-          image: filePath || null
+          image: filePath || null,
+          categoryId
         })
       })
       .then(() => {
@@ -57,19 +62,15 @@ const adminController = {
       .catch((err) => next(err))
   },
   editRestaurant: (req, res, next) => {
-    const restaurantId = req.params.id
-    Restaurants.findByPk(restaurantId, {
-      raw: true
-    })
-      .then((restaurant) => {
-        console.log(restaurant)
-        if (!restaurant) throw new Error("Restaurant didn't exist!")
-        res.render('admin/edit-restaurant', { restaurant: restaurant })
+    Promise.all([Restaurants.findByPk(req.params.id, { raw: true }), Category.findAll({ raw: true })])
+      .then(([restaurant, categories]) => {
+        if (!restaurant) throw new Error("Restaurant doesn't exist!")
+        return res.render('admin/edit-restaurant', { restaurant, categories })
       })
       .catch((err) => next(err))
   },
   putRestaurant: (req, res, next) => {
-    const { name, tel, address, openingHours, description } = req.body
+    const { name, tel, address, openingHours, description, categoryId } = req.body
     const restaurantId = req.params.id
     const { file } = req
     if (!name) throw new Error('Restaurant name is required!')
@@ -84,7 +85,8 @@ const adminController = {
           address: address,
           openingHours: openingHours,
           description: description,
-          image: filePath || restaurant.image
+          image: filePath || restaurant.image,
+          categoryId: categoryId
         })
       })
       .then(() => {
