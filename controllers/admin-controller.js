@@ -2,12 +2,15 @@
 const db = require('../models')
 const Restaurants = db.Restaurant
 const User = db.User
+const Category = db.Category
 const { localFileHandler } = require('../helpers/file-helpers')
 
 const adminController = {
   getRestaurants: (req, res, next) => {
     Restaurants.findAll({
-      raw: true
+      raw: true,
+      nest: true,
+      include: [Category]
     })
       .then((restaurants) => {
         res.render('admin/restaurants', { restaurants: restaurants })
@@ -43,7 +46,9 @@ const adminController = {
   getRestaurant: (req, res, next) => {
     const restaurantId = req.params.id
     Restaurants.findByPk(restaurantId, {
-      raw: true
+      raw: true,
+      nest: true,
+      include: [Category]
     })
       .then((restaurant) => {
         if (!restaurant) throw new Error("Restaurant didn't exist!")
