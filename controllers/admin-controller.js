@@ -13,7 +13,7 @@ const adminController = {
       include: [Category]
     })
       .then((restaurants) => {
-        res.render('admin/restaurants', { restaurants: restaurants })
+        return res.render('admin/restaurants', { restaurants: restaurants })
       })
       .catch((err) => next(err))
   },
