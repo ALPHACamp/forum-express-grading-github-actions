@@ -1,0 +1,24 @@
+<div class="card mb-3">
+  <div class="row no-gutters">
+    <div class="col-md-4">
+      {{#if userData.image}}
+      <img src="{{userData.image}}" width="300px" height="300px" style="transition: opacity 0.5s; opacity:0;"
+        onload="this.style.opacity=1;" />
+      {{else}}
+      <img src="https://via.placeholder.com/300" width="300px" height="300px"
+        style="transition: opacity 0.5s; opacity:0;" onload="this.style.opacity=1;" />
+      {{/if}}
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <h5 class="card-title">{{userData.name}}</h5>
+        <p class="card-text">
+          {{userData.email}}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+<div>
+  <a href="/users/{{userData.id}}/edit"><button class="btn btn-primary">edit</button></a>
+</div>

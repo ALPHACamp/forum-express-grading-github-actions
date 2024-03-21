@@ -1,7 +1,9 @@
 const bcrypt = require('bcryptjs')
 const db = require('../models')
 const User = db.User
+const { localFileHandler } = require('../helpers/file-helpers')
 
+/******************************************************************************** */
 const userController = {
   signupPage: (req, res) => {
     res.render('signup')
@@ -39,6 +41,42 @@ const userController = {
     req.flash('success_messages', '登出成功！')
     req.logout() //passport提供的logout()
     res.redirect('/signin')
+  },
+  getUser: (req, res, next) => {
+    const userId = req.params.id
+    return User.findByPk(userId)
+      .then((user) => {
+        const userData = user.toJSON()
+        return res.render('users/profile', { userData: userData })
+      })
+      .catch((err) => next(err))
+  },
+  editUser: (req, res, next) => {
+    const userId = req.params.id
+    return User.findByPk(userId)
+      .then((user) => {
+        const userData = user.toJSON()
+        return res.render('users/edit', { userData: userData })
+      })
+      .catch((err) => next(err))
+  },
+  putUser: (req, res, next) => {
+    const restaurantId = req.params.id
+    const userName = req.body.name
+    const file = req.file
+
+    Promise.all([User.findByPk(restaurantId), localFileHandler(file)])
+      .then(([userData, filePath]) => {
+        return userData.update({
+          name: userName,
+          image: filePath || userData.image
+        })
+      })
+      .then(() => {
+        req.flash('success_messages', 'User was successfully to update')
+        res.redirect(`/users/${restaurantId}`)
+      })
+      .catch((err) => next(err))
   }
 }
 

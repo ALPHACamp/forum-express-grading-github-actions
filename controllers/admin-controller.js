@@ -5,6 +5,7 @@ const User = db.User
 const Category = db.Category
 const { localFileHandler } = require('../helpers/file-helpers')
 
+/******************************************************************************** */
 const adminController = {
   getRestaurants: (req, res, next) => {
     Restaurants.findAll({
