@@ -1,6 +1,8 @@
 const bcrypt = require('bcryptjs')
 const db = require('../models')
 const User = db.User
+const Comment = db.Comment
+const Restaurants = db.Restaurant
 const { localFileHandler } = require('../helpers/file-helpers')
 
 /******************************************************************************** */
@@ -44,10 +46,11 @@ const userController = {
   },
   getUser: (req, res, next) => {
     const userId = req.params.id
-    return User.findByPk(userId)
-      .then((user) => {
-        const userData = user.toJSON()
-        return res.render('users/profile', { userData: userData })
+    return User.findByPk(userId, { include: { model: Comment, include: Restaurants } })
+      .then((userData) => {
+        const user = userData.toJSON()
+        console.log(user)
+        return res.render('users/profile', { user: user })
       })
       .catch((err) => next(err))
   },
@@ -56,25 +59,29 @@ const userController = {
     return User.findByPk(userId)
       .then((user) => {
         const userData = user.toJSON()
-        return res.render('users/edit', { userData: userData })
+        return res.render('users/edit', { user: userData })
       })
       .catch((err) => next(err))
   },
   putUser: (req, res, next) => {
-    const restaurantId = req.params.id
+    if (Number(req.params.id) !== Number(req.user.id)) {
+      res.redirect(`/users/${req.params.id}`)
+    }
+    const userId = req.params.id
     const userName = req.body.name
     const file = req.file
 
-    Promise.all([User.findByPk(restaurantId), localFileHandler(file)])
+    return Promise.all([User.findByPk(userId), localFileHandler(file)])
       .then(([userData, filePath]) => {
+        if (!userData) throw new Error("User didn't exist!")
         return userData.update({
           name: userName,
           image: filePath || userData.image
         })
       })
       .then(() => {
-        req.flash('success_messages', 'User was successfully to update')
-        res.redirect(`/users/${restaurantId}`)
+        req.flash('success_messages', '使用者資料編輯成功')
+        res.redirect(`/users/${userId}`)
       })
       .catch((err) => next(err))
   }
