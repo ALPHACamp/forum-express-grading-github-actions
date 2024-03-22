@@ -1,5 +1,5 @@
 const db = require('../models')
-const Restaurants = db.Restaurant
+const Restaurant = db.Restaurant
 const Category = db.Category
 const Comment = db.Comment
 const User = db.User
@@ -14,7 +14,7 @@ const restaurantController = {
     const categoryId = Number(req.query.categoryId) || ''
 
     Promise.all([
-      Restaurants.findAndCountAll({
+      Restaurant.findAndCountAll({
         where: {
           ...(categoryId ? { categoryId } : {})
         },
@@ -42,7 +42,7 @@ const restaurantController = {
   },
   getRestaurant: (req, res, next) => {
     const restaurantId = req.params.id
-    return Restaurants.findByPk(restaurantId, {
+    return Restaurant.findByPk(restaurantId, {
       /*raw: true,***** 改成使用.toJSON()*/
       /*nest: true,***** 改成使用.toJSON()*/
       include: [
@@ -58,19 +58,40 @@ const restaurantController = {
         return restaurant.increment('viewCounts', { where: { id: restaurantId } })
       })
       .then((restaurant) => {
-        console.log(restaurant)
         res.render('restaurant', { restaurant: restaurant.toJSON() })
       })
       .catch((err) => next(err))
   },
   getDashboard: (req, res, next) => {
     const restaurantId = req.params.id
-    return Restaurants.findByPk(restaurantId, {
+    return Restaurant.findByPk(restaurantId, {
       include: [Category, { model: Comment, include: User }]
     })
       .then((restaurantData) => {
         if (!restaurantData) throw new Error("Restaurant didn't exist!")
         res.render('dashboard', { restaurant: restaurantData.toJSON() })
+      })
+      .catch((err) => next(err))
+  },
+  getFeeds: (req, res, next) => {
+    return Promise.all([
+      Restaurant.findAll({
+        limit: 10,
+        order: [['createdAt', 'DESC']],
+        include: Category,
+        raw: true,
+        nest: true
+      }),
+      Comment.findAll({
+        limit: 10,
+        order: [['createdAt', 'DESC']],
+        include: [Restaurant, User],
+        raw: true,
+        nest: true
+      })
+    ])
+      .then(([restaurants, comments]) => {
+        res.render('feeds', { restaurants, comments })
       })
       .catch((err) => next(err))
   }

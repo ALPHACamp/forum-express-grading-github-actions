@@ -49,7 +49,6 @@ const userController = {
     return User.findByPk(userId, { include: { model: Comment, include: Restaurants } })
       .then((userData) => {
         const user = userData.toJSON()
-        console.log(user)
         return res.render('users/profile', { user: user })
       })
       .catch((err) => next(err))
