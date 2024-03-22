@@ -3,6 +3,7 @@ const db = require('../models')
 const User = db.User
 const Comment = db.Comment
 const Restaurants = db.Restaurant
+const Favorite = db.Favorite
 const { localFileHandler } = require('../helpers/file-helpers')
 
 /******************************************************************************** */
@@ -81,6 +82,52 @@ const userController = {
       .then(() => {
         req.flash('success_messages', '使用者資料編輯成功')
         res.redirect(`/users/${userId}`)
+      })
+      .catch((err) => next(err))
+  },
+  addFavorite: (req, res, next) => {
+    const restaurantId = req.params.restaurantId
+    const userId = req.user.id
+    return Promise.all([
+      Restaurants.findByPk(restaurantId),
+      Favorite.findOne({
+        where: {
+          userId,
+          restaurantId
+        }
+      })
+    ])
+      .then(([restaurant, favorite]) => {
+        if (!restaurant) throw new Error("Restaurant didn't exist!")
+        if (favorite) throw new Error('You have favorited this restaurant!')
+
+        return Favorite.create({
+          userId,
+          restaurantId
+        })
+      })
+      .then(() => {
+        req.flash('success_messages', '成功加入')
+        res.redirect('back')
+      })
+      .catch((err) => next(err))
+  },
+  removeFavorite: (req, res, next) => {
+    const restaurantId = req.params.restaurantId
+    const userId = req.user.id
+    return Favorite.findOne({
+      where: {
+        userId,
+        restaurantId
+      }
+    })
+      .then((favorite) => {
+        if (!favorite) throw new Error("favorited didn't exist!")
+        return favorite.destroy()
+      })
+      .then(() => {
+        req.flash('success_messages', '成功刪除')
+        res.redirect('back')
       })
       .catch((err) => next(err))
   }
