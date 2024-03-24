@@ -3,6 +3,7 @@ const LocalStrategy = require('passport-local')
 const bcrypt = require('bcryptjs')
 const db = require('../models')
 const User = db.User
+const Restaurant = db.Restaurant
 
 // Local登入驗證策略********/
 passport.use(
@@ -29,7 +30,14 @@ passport.serializeUser((user, cb) => {
 })
 // 登入時從session比對，看是否已經是登入狀態********/
 passport.deserializeUser((id, cb) => {
-  User.findByPk(id).then((user) => {
+  return User.findByPk(id, {
+    include: [
+      {
+        model: Restaurant,
+        as: 'FavoritedRestaurants'
+      }
+    ]
+  }).then((user) => {
     user = user.toJSON()
     return cb(null, user)
   })
