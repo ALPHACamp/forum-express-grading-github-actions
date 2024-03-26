@@ -38,6 +38,16 @@
             <button type="submit" class="btn btn-primary m-1">加到最愛</button>
           </form>
           {{/if}}
+
+          {{#if isLiked}}
+          <form action="/like/{{this.id}}?_method=DELETE" method="POST">
+            <button type="submit" class="btn btn-outline-secondary m-1">取消 <i class="fa-solid fa-thumbs-up"></i></button>
+          </form>
+          {{else}}
+          <form action="/like/{{this.id}}" method="POST">
+            <button type="submit" class="btn btn-secondary m-1"><i class="fa-solid fa-thumbs-up fa-xl"></i></button>
+          </form>
+          {{/if}}
         </div>
       </div>
     </div>

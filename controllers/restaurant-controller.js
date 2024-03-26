@@ -28,10 +28,12 @@ const restaurantController = {
     ])
       .then(([restaurants, categories]) => {
         const favoritedRestaurantsId = req.user && req.user.FavoritedRestaurants.map((fr) => fr.id)
+        const likedRestaurantsId = req.user && req.user.LikedRestaurants.map((lr) => lr.id)
         const data = restaurants.rows.map((r) => ({
           ...r,
           description: r.description.substring(0, 50),
-          isFavorited: favoritedRestaurantsId.includes(r.id)
+          isFavorited: favoritedRestaurantsId.includes(r.id),
+          isLiked: likedRestaurantsId.includes(r.id)
         }))
         return res.render('restaurants', {
           restaurants: data,
@@ -91,6 +93,25 @@ const restaurantController = {
         res.render('feeds', { restaurants, comments })
       })
       .catch((err) => next(err))
+  },
+  getTopRestaurants: (req, res, next) => {
+    return Restaurant.findAll({
+      include: [{ model: User, as: 'FavoritedUsers' }]
+    })
+      .then((topRestaurants) => {
+        const restaurants = topRestaurants
+          .map((r) => ({
+            ...r.toJSON(),
+            description: r.description.substring(0, 50),
+            favoritedCount: r.FavoritedUsers.length,
+            isFavorited: req.user && req.user.FavoritedRestaurants.some((fr) => fr.id === r.id)
+          }))
+          .sort((a, b) => b.favoritedCount - a.favoritedCount)
+          .slice(0, 10)
+          
+        res.render('top-restaurants', { restaurants: restaurants })
+      })
+      .catch((e) => next(e))
   }
 }
 

@@ -4,6 +4,7 @@ const User = db.User
 const Comment = db.Comment
 const Restaurants = db.Restaurant
 const Favorite = db.Favorite
+const Like = db.Like
 const Followship = db.Followship
 const { localFileHandler } = require('../helpers/file-helpers')
 
@@ -132,18 +133,65 @@ const userController = {
       })
       .catch((err) => next(err))
   },
+  addLike: (req, res, next) => {
+    const restaurantId = req.params.restaurantId
+    const userId = req.user.id
+    return Promise.all([
+      Restaurants.findByPk(restaurantId),
+      Like.findOne({
+        where: {
+          userId,
+          restaurantId
+        }
+      })
+    ])
+      .then(([restaurant, like]) => {
+        if (!restaurant) throw new Error("Restaurant didn't exist!")
+        if (like) throw new Error('You have favorited this restaurant!')
+
+        return Like.create({
+          userId,
+          restaurantId
+        })
+      })
+      .then(() => {
+        req.flash('success_messages', '成功加入')
+        res.redirect('back')
+      })
+      .catch((err) => next(err))
+  },
+  removeLike: (req, res, next) => {
+    const restaurantId = req.params.restaurantId
+    const userId = req.user.id
+    return Like.findOne({
+      where: {
+        userId,
+        restaurantId
+      }
+    })
+      .then((like) => {
+        if (!like) throw new Error("favorited didn't exist!")
+        return like.destroy()
+      })
+      .then(() => {
+        req.flash('success_messages', '成功刪除')
+        res.redirect('back')
+      })
+      .catch((err) => next(err))
+  },
   getTopUsers: (req, res, next) => {
     return User.findAll({
       include: [{ model: User, as: 'Followers' }]
     })
       .then((users) => {
-        users = users.map((user) => ({
-          ...user.toJSON(),
-          followerCount: user.Followers.length,
-          isFollowed: req.user.Followings.some((f) => f.id === user.id)
-        }))
-        users = users.sort((a, b) => b.followerCount - a.followerCount)
-        res.render('top-users', { users: users })
+        const topUsers = users
+          .map((user) => ({
+            ...user.toJSON(),
+            followerCount: user.Followers.length,
+            isFollowed: req.user.Followings.some((f) => f.id === user.id)
+          }))
+          .sort((a, b) => b.followerCount - a.followerCount)
+        res.render('top-users', { users: topUsers })
       })
       .catch((err) => next(err))
   },
