@@ -10,3 +10,5 @@ rules:
   arrow-parens:
     - warn
     - as-needed
+  semi: [2, 'always']
+  comma-style: 'last'
