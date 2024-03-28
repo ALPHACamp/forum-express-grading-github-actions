@@ -1,52 +1,62 @@
-# README
+# 餐廳論壇
 
-1. Fork
-2. git clone
+## 功能
 
-## 初始化
-### Initialize
+### 後台
+
+- 具備權限的管理者可以進入網站後台進行操作。
+- 管理者可以在後台新增、修改、刪除餐廳資料。
+- 管理者可以在後台修改使用者的權限。
+
+### 環境要求
+
+- Node.js v14
+- MySQL v8
+
+## 安裝
+
+1. clone 本專案後 cd 至專案資料夾，並執行以下命令安裝相關套件。
+
 ```
-git remote add upstream https://github.com/ALPHACamp/forum-express-grading.git  # 建立上游連線
 npm install
 ```
 
-### 設定資料庫
-需要與 config/config.json 一致
+2. 至 `config/config.json` 檔案調整資料庫設定，並執行以下命令進行資料庫環境建置。
 
 ```
-create database forum;
+npm run db:setup
 ```
 
-### 執行測試
-```
-npm run test
-```
+3. 創建環境變數檔案，命名方式為 .env.{{當前環境}} 。
 
-## 下載作業規格
-以 R01 為例
+- 若是創建 development 環境變數檔，可使用以下命令：
 
 ```
-git checkout -b R01           # 開新分支
-git merge origin/R01-test     # 下載作業規格
-npm run test                  # 直到綠燈全亮
-
-git add .
-git commit -m "...."
+npm run env-dev:create
 ```
 
-## 繳交作業
+- 參考下方格式調整環境變數：
 
 ```
-git push origin R01           # 上傳本地進度
+# session config
+SESSION_SECRET={{YOUR_SESSION_SECRET}}
+SESSION_RE_SAVE=false
+SESSION_SAVE_UNINITIALIZED=false
+
+ROOT_ADMIN_EMAIL="root@example.com"
 ```
 
-接著改成到 GitHub 來發 PR。
+4. 設置環境變數 NODE_ENV={{當前環境}}，並使用以下命令來執行本專案。
 
-## 共用帳號
-請一律設定下面 2 組帳號以利驗收：
-* 第一組帳號有 admin 權限：
-  * email: root@example.com
-  * password: 12345678
-* 第二組帳號沒有 admin 權限：
-  * email: user1@example.com
-  * password: 12345678
+```
+npm run start
+```
+
+5. 啟動伺服器後，開啟瀏覽器連線至網頁 http://localhost:3000 。
+
+```
+可使用以下兩組帳號密碼進行登入
+
+- 帳號：root@example.com / 密碼：12345678
+- 帳號：user1@example.com / 密碼：12345678
+```
