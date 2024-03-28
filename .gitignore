@@ -3,5 +3,5 @@ temp/
 upload/
 
 .DS_Store
-.env
+.env.*
 .idea

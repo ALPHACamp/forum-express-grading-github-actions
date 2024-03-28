@@ -4,10 +4,10 @@ const currentYear = () => dayjs().year();
 
 const isEqual = (a, b) => a === b;
 
-const isRootUser = (email) => email === 'root@example.com';
+const isRootAdmin = (email) => email === process.env.ROOT_ADMIN_EMAIL;
 
 module.exports = {
   currentYear,
   isEqual,
-  isRootUser,
+  isRootAdmin,
 };
