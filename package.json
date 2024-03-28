@@ -5,10 +5,14 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
+    "dev-mac": "NODE_ENV=development && nodemon app.js",
     "dev-win": "set \"NODE_ENV=development\" && nodemon app.js",
     "lint": "eslint \"**/*.js\" --fix",
     "test": "mocha tests --exit --recursive --timeout 5000",
-    "test-win": "set \"NODE_ENV=test\" && mocha tests --exit --recursive --timeout 5000"
+    "test-mac": "NODE_ENV=test && mocha tests --exit --recursive --timeout 5000",
+    "test-win": "set \"NODE_ENV=test\" && mocha tests --exit --recursive --timeout 5000",
+    "env-dev:create": "cp .env-example .env.development",
+    "db:setup": "npx sequelize db:create && npx sequelize db:migrate && npx sequelize db:seed:all"
   },
   "repository": {
     "type": "git",
