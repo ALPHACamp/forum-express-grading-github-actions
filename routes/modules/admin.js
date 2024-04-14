@@ -8,6 +8,9 @@ router.get('/restaurants/:id', adminController.getRestaurant)
 router.put('/restaurants/:id', upload.single('image'), adminController.putRestaurant)
 router.delete('/restaurants/:id', adminController.deleteRestaurant)
 router.post('/restaurants', upload.single('image'), adminController.postRestaurant)
+router.get('/users', adminController.getUsers)
+router.patch('/users/:id', adminController.patchUser)
 router.get('/restaurants', adminController.getRestaurants)
+
 router.use('/', (req, res) => res.redirect('/admin/restaurants'))
 module.exports = router
