@@ -16,6 +16,18 @@ const restaurantController = {
         restaurants: data
       })
     })
+  },
+  getRestaurant: (req, res, next) => {
+    Restaurant.findByPk(req.params.id, {
+      include: Category,
+      nest: true,
+      raw: true
+    })
+      .then(restaurant => {
+        if (!restaurant) throw new Error("Restaurant dosen't exist!")
+        res.render('restaurant', { restaurant })
+      })
+      .catch(err => next(err))
   }
 }
 
