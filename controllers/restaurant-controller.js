@@ -11,7 +11,6 @@ const restaurantController = {
         ...r,
         description: r.description.substring(0, 50)
       }))
-      console.log('data:', data)
       return res.render('restaurants', {
         restaurants: data
       })
@@ -19,14 +18,22 @@ const restaurantController = {
   },
   getRestaurant: (req, res, next) => {
     Restaurant.findByPk(req.params.id, {
+      include: Category
+    })
+      .then(restaurant => {
+        if (!restaurant) throw new Error("Restaurant dosen't exist!")
+        return restaurant.increment('viewCounts', { by: 1 })
+      })
+      .then(restaurant => res.render('restaurant', { restaurant: restaurant.toJSON() }))
+      .catch(err => next(err))
+  },
+  getDashboard: (req, res, next) => {
+    return Restaurant.findByPk(req.params.id, {
       include: Category,
       nest: true,
       raw: true
     })
-      .then(restaurant => {
-        if (!restaurant) throw new Error("Restaurant dosen't exist!")
-        res.render('restaurant', { restaurant })
-      })
+      .then(restaurant => res.render('dashboard', { restaurant }))
       .catch(err => next(err))
   }
 }
