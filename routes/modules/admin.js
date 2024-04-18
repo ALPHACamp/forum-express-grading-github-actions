@@ -17,6 +17,5 @@ router.post('/categories', categoryController.postCategory)
 router.put('/categories/:id', categoryController.putCategory)
 router.delete('/categories/:id', categoryController.deleteCategory)
 router.get('/restaurants', adminController.getRestaurants)
-
 router.use('/', (req, res) => res.redirect('/admin/restaurants'))
 module.exports = router
