@@ -30,11 +30,23 @@
   <button type="submit" class="btn btn-danger">Delete</button>
 </form>
 {{/if}}
+
 <blockquote class="blockquote mb-0">
-  <h4><a href="/users/{{this.User.id}}">{{this.User.name}}</a></h4>
-  <p>{{this.text}}</p>
-  <footer class="blockquote-footer">{{relativeTimeFromNow this.createdAt}}</footer>
+  <div class="row">
+    <div class="col-2">
+      <a href="/users/{{this.User.id}}">
+        <img src="{{this.User.image}}" class="img-responsive" style="width: 100%;">
+      </a>
+    </div>
+    <div class="col">
+      <h4><a href="/users/{{this.User.id}}">{{this.User.name}}</a></h4>
+      <p>{{this.text}}</p>
+      <footer class="blockquote-footer">{{relativeTimeFromNow this.createdAt}}</footer>
+    </div>
+  </div>
 </blockquote>
+  
+
 <hr />
 {{/each}}
 

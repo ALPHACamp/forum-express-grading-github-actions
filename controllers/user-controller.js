@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs')
 const db = require('../models')
-const { User } = db
+const { User, Comment, Restaurant } = db
 const { localFileHandler } = require('../helpers/file-helpers')
 const userController = {
   signUpPage: (req, res) => {
@@ -38,9 +38,33 @@ const userController = {
     res.redirect('/signin')
   },
   getUser: (req, res, next) => {
-    return User.findByPk(req.params.id, { raw: true })
+    // 資料庫依id查詢:user, user所屬的comment, comment所屬的restaurant
+    return User.findByPk(req.params.id, {
+      include: [
+        {
+          model: Comment,
+          include: Restaurant
+        }
+      ]
+    })
       .then(user => {
         if (!user) throw new Error("User didn't exist!")
+        user = user.toJSON()
+        const tempComments = []
+        if (user.Comments) {
+          // 將原Comments陣列內，restaurantId不重複的物件篩選出，組成新陣列，然後取代原Comments陣列
+          user.Comments = user.Comments.filter(comment => {
+            if (tempComments.some(v => v.restaurantId === comment.restaurantId)) return false
+            tempComments.push(comment)
+            return true
+          })
+          user.totalComments = user.Comments.length
+          console.log('totalComments:', user.totalComments)
+        } else {
+          if (user.Comment) user.totalComments = 1
+          else user.totalComments = 0
+        }
+        console.log('totalComments:', user.totalComments)
         res.render('users/profile', { user })
       })
       .catch(err => next(err))
