@@ -1,0 +1,15 @@
+
+<div class="container bg-white">
+  <div class="row">
+    <div class="col-4 ps-0">
+      <img src="{{#if user.image}}{{user.image}}{{else}}/upload/default-profile-picture.jpg{{/if}}"
+        class="img-thumbnail img-responsive">
+    </div>
+    <div class="col-8">
+      <h1>{{user.name}}</h1>
+      <h2>{{user.email}}</h2>
+      <a href="/users/{{user.id}}/edit" class="btn btn-primary">Edit</a>
+    </div>
+  </div>
+</div>
+

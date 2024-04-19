@@ -35,7 +35,7 @@ const restaurantController = {
       .catch(err => next(err))
   },
   getRestaurant: (req, res, next) => {
-    Restaurant.findByPk(req.params.id, {
+    return Restaurant.findByPk(req.params.id, {
       include: [
         Category,
         { model: Comment, include: User }
@@ -51,11 +51,18 @@ const restaurantController = {
   },
   getDashboard: (req, res, next) => {
     return Restaurant.findByPk(req.params.id, {
-      include: Category,
-      nest: true,
-      raw: true
+      include: [
+        Category,
+        Comment
+      ]
     })
-      .then(restaurant => res.render('dashboard', { restaurant }))
+      .then(restaurant => {
+        console.log('restaurant:', restaurant.toJSON())
+        restaurant = restaurant.toJSON()
+        console.log('restaurant', restaurant)
+        restaurant.totalComments = restaurant.Comments ? restaurant.Comments.length : restaurant.Comment in restaurant ? 1 : 0
+        res.render('dashboard', { restaurant })
+      })
       .catch(err => next(err))
   }
 }
