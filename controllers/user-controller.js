@@ -59,12 +59,10 @@ const userController = {
             return true
           })
           user.totalComments = user.Comments.length
-          console.log('totalComments:', user.totalComments)
         } else {
           if (user.Comment) user.totalComments = 1
           else user.totalComments = 0
         }
-        console.log('totalComments:', user.totalComments)
         res.render('users/profile', { user })
       })
       .catch(err => next(err))
