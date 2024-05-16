@@ -1,7 +1,7 @@
 const express = require('express')
 const handlebars = require('express-handlebars') // 引入 express-handlebars
 const routes = require('./routes')
-
+const { getUser } = require('./helpers/auth-helper')
 const app = express()
 const port = process.env.PORT || 3000
 const flash = require('connect-flash')
@@ -21,6 +21,7 @@ app.use(flash())
 app.use((req, res, next) => {
   res.locals.success_messages = req.flash('success_messages')
   res.locals.error_messages = req.flash('error_messages')
+  res.locals.user = getUser(req)
   next()
 })
 app.use(routes)
