@@ -34,6 +34,16 @@ const adminController = {
         res.render('admin/restaurant', { restaurant })
       })
       .catch(err => next(err))
+  },
+  editRestaurant: (req, res, next) => {
+    Restaurant.findByPk(req.params.id, {
+      raw: true
+    })
+      .then(restaurant => {
+        if (!restaurant) throw new Error('Restaurant did not exist!')
+        res.render('admin/edit-restaurant', { restaurant })
+      })
+      .catch(err => next(err))
   }
 }
 module.exports = adminController
