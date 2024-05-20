@@ -29,7 +29,7 @@
       <td>admin</td>
       <td>
         <form action="/admin/users/{{this.id}}?_method=PATCH" method="POST" style="display: inline;">
-          <button type="submit" class="btn btn-link" onclick="if('{{this.name}}'=== 'root') {this.disable = true; return false;} else {return confirm(`確定要設定 {{ this.name }} 為使用者嗎？`)}">set as user</button>
+          <button type="submit" class="btn btn-link" onclick="return confirm(`確定要設定 {{ this.name }} 為使用者嗎？`)">set as user</button>
         </form>
       </td>
       {{else}}
