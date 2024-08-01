@@ -35,7 +35,7 @@ passport.deserializeUser((id, cb) => {
   User.findByPk(id)
     .then(user => {
       console.log(user)
-      return cb(null, user)
+      return cb(null, user.dataValues)
     })
 })
 
