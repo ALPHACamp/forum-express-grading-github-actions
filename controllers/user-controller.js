@@ -40,7 +40,7 @@ const userController = {
     return User.findByPk(req.params.id, { raw: true })
       .then(user => {
         if (!user) throw new Error("User didn't exist!")
-        return res.render('users/profile', { userId: Number(req.params.id) })
+        return res.render('users/profile', { user, userId: Number(req.params.id) })
       })
       .catch(err => next(err))
   },
@@ -54,14 +54,13 @@ const userController = {
   },
   putUser: (req, res, next) => {
     const { name } = req.body
-    if (!name) throw new Error('User name is required!')
     const { file } = req
-    Promise.all([
+    if (!name) throw new Error('User name is required!')
+    return Promise.all([
       User.findByPk(req.params.id),
       localFileHandler(file)
     ])
       .then(([user, filePath]) => {
-        console.log('user:', user)
         if (!user) throw new Error("User didn't exist!")
         return user.update({
           name,
@@ -70,7 +69,7 @@ const userController = {
       })
       .then(() => {
         req.flash('success_messages', '使用者資料編輯成功')
-        res.redirect(`/users/${req.params.id}`)
+        return res.redirect(`/users/${req.params.id}`)
       })
       .catch(err => next(err))
   }
