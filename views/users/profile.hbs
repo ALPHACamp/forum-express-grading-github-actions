@@ -1,0 +1,18 @@
+<div class="card mb-3" style="max-width: 540px;">
+  <div class="row g-0">
+    <div class="col-md-4">
+      <img src="{{#if user.image}}{{user.image}}{{else}}https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ12lYNi9ON02p9zySLVYzHFAkvMdJtDiT2oA&s{{/if}}" class="rounded-start square-img" alt="user-profile-photo">
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <h5 class="card-title">{{user.name}}</h5>
+        <p class="card-text">{{user.email}}</p>
+        {{#ifCond user.id userId}}
+          <form action="/users/{{user.id}}/edit" method="get">
+            <button type="submit" class="btn btn-primary">Edit</button>
+          </form>
+        {{/ifCond}}
+      </div>
+    </div>
+  </div>
+</div>
