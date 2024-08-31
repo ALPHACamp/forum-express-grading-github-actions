@@ -9,7 +9,7 @@
         <h5 class="card-title">{{user.name}}</h5>
         <p class="card-text">{{user.email}}</p>
         <p class="card-text">已評論餐廳: {{comments.count}}</p>
-        {{#ifCond user.id userId }}
+        {{#ifCond user.id userId}}
           <form action="/users/{{user.id}}/edit" method="get">
             <button type="submit" class="btn btn-primary">Edit</button>
           </form>
