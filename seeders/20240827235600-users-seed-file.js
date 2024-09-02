@@ -5,11 +5,11 @@ module.exports = {
     // 將資料的ID起始值設為1
     await queryInterface.sequelize.query('ALTER TABLE users AUTO_INCREMENT = 1;')
     // 一次新增三筆資料
-    await queryInterface.bulkInsert('Users', [{
+    await queryInterface.bulkInsert('users', [{
       email: 'root@example.com',
       password: await bcrypt.hash('12345678', 10),
       is_admin: true,
-      name: 'admin',
+      name: 'root',
       created_at: new Date(),
       updated_at: new Date()
     }, {
