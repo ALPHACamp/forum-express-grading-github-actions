@@ -1,0 +1,69 @@
+<h1>餐廳後台</h1>
+<div class="row">
+  {{> admin-tabs route='restaurants'}}
+</div>
+<br />
+<a href='/admin/restaurants/create'>
+  <button type="button" class="btn btn-primary">New Restaurant</button>
+</a>
+<br />
+<br />
+<table class="table align-middle ">
+  <thead class="thead-dark">
+    <tr class="table-dark">
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Category</th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each restaurants}}
+    <tr>
+      <th scope="row">{{this.id}}</th>
+      <td>{{this.name}}</td>
+      <td>{{this.Category.name}}</td>
+      <td>
+        <button type="button" class="btn btn-link">
+          <a class="btn btn-link link-primary" href="/admin/restaurants/{{this.id}}">
+            Show
+          </a>
+        </button>
+        <button type="button" class="btn btn-link">
+          <a class="btn btn-link link-primary" href="/admin/restaurants/{{this.id}}/edit">
+            Edit
+          </a>
+        </button>
+        <form action="/admin/restaurants/{{this.id}}?_method=DELETE" method="POST" style="display: inline;">
+          <button type="submit" class="btn btn-link link-danger" onclick="return confirm(`確定要刪除{{this.name}}嗎?`)">Delete</button>
+        </form>
+      </td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+
+{{!-- pagination --}}
+<nav aria-label="Page navigation example">
+  <ul class="pagination justify-content-center">
+    <li class="page-item {{#ifEqual pagination.currentPage 1}}disabled{{/ifEqual}}">
+      <a class="page-link" href="/admin/restaurants?page={{pagination.prev}}" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    {{#each pagination.pages}}
+    {{#ifEqual this ../pagination.currentPage}}
+    <li class="page-item active">
+      <a class="page-link" href="#">{{this}}</a>
+    </li>
+    {{else}}
+    <li class="page-item"><a class="page-link" href="/admin/restaurants?page={{this}}">{{this}}</a></li>
+    {{/ifEqual}}
+    {{/each}}
+    <li class="page-item {{#ifEqual pagination.currentPage pagination.totalPages}}disabled{{/ifEqual}}">
+      <a class="page-link" href="/admin/restaurants?page={{pagination.next}}" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+  </ul>
+</nav>
