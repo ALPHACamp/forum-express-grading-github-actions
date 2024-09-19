@@ -1,0 +1,27 @@
+{{> message}}
+
+<div class="row mb-2">
+  <div class="col-md-12">
+    <h1>{{restaurant.name}}</h1>
+    <p {{#if restaurant.Category.name}} {{else}} class="text-danger" {{/if}}>
+      [{{#if restaurant.Category.name}}
+      {{restaurant.Category.name}}
+      {{else}}
+      尚未分類
+      {{/if}}]
+    </p>
+  </div>
+
+  <hr>
+
+  <div class="col-md-6 ms-2">
+    <div class="well">
+      <ul>
+        <li><strong>瀏覽次數 : </strong> {{restaurant.viewCounts}} </li>
+        <li><strong>評論數 : </strong> {{count restaurant.Comments}} </li>
+        <li><strong>收藏數 : </strong> - </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<a class="btn btn-link text-decoration-none p-0" href="javascript:history.back()">回上一頁</a>

@@ -1,0 +1,15 @@
+{{> message}}
+
+<form action="/users/{{user.id}}?_method=PUT" method="POST" enctype="multipart/form-data">
+  <div class="form-row mb-3">
+    <label class="form-label" for="name">Name</label>
+    <input class="form-control" type="text" id="name" name="name" value="{{user.name}}" required>
+  </div>
+
+  <div class="form-row mb-3">
+    <label class="form-label" for="image">Image</label>
+    <input class="bg-light" type="file" id="image" name="image" style="display: block;">
+  </div>
+
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>

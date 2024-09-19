@@ -1,0 +1,33 @@
+{{> message}}
+
+<div class="row">
+  <div class="col-md-12">
+    <h1>{{restaurant.name}}</h1>
+    <p {{#if restaurant.Category.name}} {{else}} class="text-danger" {{/if}}>
+      [{{#if restaurant.Category.name}}
+        {{restaurant.Category.name}}
+      {{else}}
+        尚未分類
+      {{/if}}]
+    </p>
+  </div>
+  <div class="col-md-4">
+    <img class="img-responsive center-block" src="{{restaurant.image}}"
+      style="width: 250px; margin-bottom: 25px; transition: opacity 0.5s; opacity:0;" onload="this.style.opacity=1;">
+    <br>
+    <div class="well">
+      <ul class="list-unstyled">
+        <li><strong>Opening Hour:</strong> {{restaurant.openingHours}}</li>
+        <li><strong>Tel:</strong> {{restaurant.tel}}</li>
+        <li><strong>Address:</strong> {{restaurant.address}}</li>
+      </ul>
+    </div>
+  </div>
+  <div class="col-md-8">
+    <p style="white-space: break-spaces;">{{restaurant.description}}</p>
+  </div>
+  <hr>
+</div>
+
+{{!-- javascript:history.back() 回到上一頁指令 --}}
+<a class="btn btn-outline-secondary" href="javascript:history.back()">Back</a>

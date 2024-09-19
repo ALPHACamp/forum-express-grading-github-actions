@@ -1,0 +1,46 @@
+{{> message}}
+
+<div class="row bg-body border mb-3">
+
+  <div class="col-md-4">
+    <img class="img-responsive center-block rounded-circle" src="{{user.image}}"
+      style="width: 300px; max-height: 300px; transition: opacity 0.5s; opacity:0;" onload="this.style.opacity=1;">
+  </div>
+
+  <div class="col-md-8 mt-3">
+    <h3>{{user.name}}</h3>
+    <p>{{user.email}}</p>
+    <p>
+      {{#if user.Comments.length}}
+      {{user.Comments.length}} 已評論餐廳
+      {{else}}
+      尚未有評論
+      {{/if}}
+    </p>
+    <a href="/users/{{user.id}}/edit">
+      <button type="button" class="btn btn-primary">edit</button>
+    </a>
+  </div>
+
+</div>
+
+<div class="row">
+
+  <h4 class="d-flex align-items-center bg-dark-subtle border border-bottom-0 my-0" style="min-height: 50px;">
+    {{#if user.Comments.length}}
+    {{user.Comments.length}} 已評論餐廳
+    {{else}}
+    尚未有評論
+    {{/if}}
+  </h4>
+
+  <div class="d-flex flex-wrap align-items-center bg-body border p-3" style="margin: 0 auto;">
+    {{#each user.Comments}}
+    <a class="mb-3" href="/restaurants/{{this.Restaurant.id}}">
+      <img class="img-responsive center-block me-3" src="{{this.Restaurant.image}}"
+        style="width: 100px; max-height: 300px; transition: opacity 0.5s; opacity:0;" onload="this.style.opacity=1;">
+    </a>
+    {{/each}}
+  </div>
+
+</div>
