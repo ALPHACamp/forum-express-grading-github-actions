@@ -1,0 +1,56 @@
+<h1>餐廳後台</h1>
+{{>admin-switch-table route='categories'}}
+{{#if category}}
+<form class="container" action="/admin/categories/{{category.id}}?_method=PUT" method="POST">
+  <div class="row justify-content-start">
+  <div class="mb-3 mt-2 col-4">
+    <input type="text" class="form-control" id="name" name="name" value="{{category.name}}">
+  </div>
+  <div class="mb-3 mt-2 col-2">
+    <div class="row">
+    <button type="submit" class="col-4 btn btn-warning">修改</button>
+    <a class="col-8 btn btn-link link-secondary" href="/admin/categories">or Create New</a>
+    </div>
+  </div>
+    
+  </div>
+</form>
+{{else}}
+<form class="container" action="/admin/categories" method="POST">
+  <div class="row justify-content-start">
+  <div class="mb-3 mt-2 col-4">
+    <input type="text" class="form-control" placeholder="請輸入要創建的類別名稱" id="name" name="name">
+  </div>
+  <div class="mb-3 mt-2 col-2">
+    <button type="submit" class="btn btn-primary">創建</button>
+  </div>
+  </div>
+</form>
+{{/if}}
+<table class="table table-striped mt-4">
+    <thead class="table-dark">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Categories Name</th>
+      <th scope="col">#</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each categories}}
+    <tr>
+        <th scope="row">{{this.id}}</th>
+        <td>{{this.name}}</td>
+        <td>
+            <button type="button" class="btn btn-link">
+            <a class="btn btn-link link-primary" href="/admin/categories/{{this.id}}">
+              Edit
+            </a>
+          </button>
+          <form action="/admin/categories/{{this.id}}?_method=DELETE" method="POST" style="display: inline;">
+            <button type="submit" class="btn btn-link link-danger" onclick="return confirm(`確定要刪除 {{ this.name }} 嗎？`)">Delete</button>
+          </form>
+        </td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
