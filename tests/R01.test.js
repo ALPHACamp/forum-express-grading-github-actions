@@ -1,10 +1,11 @@
+/* eslint-disable no-undef */
 const request = require('supertest')
 const chai = require('chai')
 const sinon = require('sinon')
 const should = chai.should()
 
 const app = require('../app')
-const { createModelMock, createControllerProxy, mockRequest, mockResponse, mockNext } = require('../helpers/unit-test-helper');
+const { createModelMock, createControllerProxy, mockRequest, mockResponse, mockNext } = require('../helpers/unit-test-helper')
 
 describe('# R01', () => {
   describe('登入測試: POST /signin', function () {
@@ -16,7 +17,7 @@ describe('# R01', () => {
         .post('/signin')
         .type('urlencoded')
         .send('email=root@example.com&password=123')
-        // 期待登入驗證回應失敗，重新導向 /signin
+        // 期待登入驗證回應失敗，重新導向 / signin
         .expect('Location', '/signin')
         .expect(302, done)
     })
@@ -42,7 +43,7 @@ describe('# R01', () => {
         .expect('Location', '/restaurants')
         .expect(302, done)
     })
-  });
+  })
 
   describe('# 使用者權限管理', function () {
     // 前置準備
@@ -53,7 +54,7 @@ describe('# R01', () => {
         id: 1,
         email: 'root@example.com',
         name: 'admin',
-        isAdmin: false,
+        isAdmin: false
       }])
 
       // 修改 adminController 中的資料庫連線設定，由連向真實的資料庫 -> 改為連向模擬的 User table
@@ -88,7 +89,7 @@ describe('# R01', () => {
             id: 1,
             email: 'root@example.com',
             name: 'admin',
-            isAdmin: true, // 是管理者
+            isAdmin: true // 是管理者
           }]
         )
 
@@ -124,7 +125,7 @@ describe('# R01', () => {
             id: 1,
             email: 'user@example.com',
             name: 'user',
-            isAdmin: false, // 非管理者
+            isAdmin: false // 非管理者
           }]
         )
         // 將 adminController 中的 User db 取代成 User mock db
