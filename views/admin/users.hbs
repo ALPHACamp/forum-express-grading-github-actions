@@ -18,18 +18,13 @@
       <th scope="row">{{this.id}}</th>
       <td>{{this.name}}</td>
       <td>{{this.email}}</td>
-      <td>{{this.role}}</td>
+      <td>{{#if this.isAdmin}}admin{{else}}user{{/if}}</td>
       <td>
-        <button type="button" class="btn btn-link">
-          <a class="btn btn-link link-primary" href="###">
-            Set as user
-          </a>
-        </button>
-        <button type="button" class="btn btn-link">
-          <a class="btn btn-link link-primary" href="###">
-            Set as admin
-          </a>
-        </button>
+        <form action="/admin/users/{{this.id}}?_method=PATCH" method="POST">
+          <button type="submit" class="btn btn-link">
+            {{#if this.isAdmin}}Set as user{{else}}Set as admin{{/if}}
+          </button>
+        </form>
       </td>
     </tr>
     {{/each}}
