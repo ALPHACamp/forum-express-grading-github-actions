@@ -3,6 +3,7 @@ const { getOffset, getPagination } = require('../helpers/pagination-helper')
 
 const restaurantController = {
   getRestaurants: (req, res, next) => {
+    console.log(req.query)
     const categoryId = Number(req.query.categoryId) || ''
 
     const DEFAULT_LIMIT = 9
@@ -93,6 +94,23 @@ const restaurantController = {
     ])
       .then(([restaurants, comments]) => {
         return res.render('feeds', { restaurants, comments })
+      })
+      .catch(err => next(err))
+  },
+  getTopRestaurants: (req, res, next) => {
+    return Restaurant.findAll({
+      include: [{ model: User, as: 'FavoritedUsers' }]
+    })
+      .then(restaurants => {
+        const result = restaurants
+          .map(r => ({
+            ...r.toJSON(),
+            description: r.description.substring(0, 200),
+            favoritedCount: r.FavoritedUsers.length,
+            isFavorited: req.user && req.user.FavoritedRestaurants.some(f => f.id === r.id)
+          }))
+          .sort((a, b) => b.favoritedCount - a.favoritedCount)
+        res.render('top-restaurants', { restaurants: result })
       })
       .catch(err => next(err))
   }

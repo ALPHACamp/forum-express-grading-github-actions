@@ -90,7 +90,7 @@ const userController = {
   addFavorite: (req, res, next) => {
     const userId = req.user.id
     const { restaurantId } = req.params
-    Promise.all([
+    return Promise.all([
       Restaurant.findByPk(restaurantId),
       Favorite.findOne({ where: { userId, restaurantId } })
     ])
@@ -110,7 +110,7 @@ const userController = {
     const userId = req.user.id
     const { restaurantId } = req.params
 
-    Promise.all([
+    return Promise.all([
       Restaurant.findByPk(restaurantId),
       Favorite.findOne({ where: { userId, restaurantId } })
     ])
